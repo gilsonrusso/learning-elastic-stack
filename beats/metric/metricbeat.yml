@@ -1,0 +1,48 @@
+metricbeat.modules:
+- module: docker
+  metricsets: ["container", "cpu", "diskio", "event", "healthcheck", "image", "info", "memory", "network"]
+  hosts: ["unix:///var/run/docker.sock"]
+  period: 10s
+
+- module: elasticsearch
+  metricsets: ["node", "node_stats", "cluster_stats", "index"]
+  period: 10s
+  hosts: ["elasticsearch:9200"]  
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+
+setup.kibana:
+  host: "kibana:5601"
+
+setup.dashboards.enabled: true
+
+
+# Explicação do arquivo "metricbeat.yml"
+# 1. **metricbeat.modules**:
+#    - Define os módulos que o Metricbeat irá usar para coletar métricas.
+
+# 2. **- module: docker**:
+#    - Configura o módulo Docker para coletar métricas dos containers Docker.
+#    - **metricsets**: Lista de conjuntos de métricas a serem coletadas, incluindo "container", "cpu", "diskio", "event", "healthcheck", "image", "info", "memory", "network".
+#    - **hosts**: Define o socket Unix onde o Docker está escutando.
+#    - **period**: Intervalo de tempo para coleta das métricas (10 segundos).
+
+# 3. **- module: elasticsearch**:
+#    - Configura o módulo Elasticsearch para coletar métricas do cluster Elasticsearch.
+#    - **metricsets**: Lista de conjuntos de métricas a serem coletadas, incluindo "node", "node_stats", "cluster_stats", "index".
+#    - **period**: Intervalo de tempo para coleta das métricas (10 segundos).
+#    - **hosts**: Define o endereço do Elasticsearch.
+
+# 4. **output.elasticsearch**:
+#    - Configura o destino onde as métricas coletadas serão enviadas.
+#    - **hosts**: Define o endereço do Elasticsearch onde as métricas serão armazenadas.
+
+# 5. **setup.kibana**:
+#    - Configura o Kibana para visualização das métricas.
+#    - **host**: Define o endereço do Kibana.
+
+# 6. **setup.dashboards.enabled**:
+#    - Habilita a configuração automática dos dashboards no Kibana.
+
+# Este arquivo configura o Metricbeat para coletar métricas de containers Docker e de um cluster Elasticsearch, e envia essas métricas para um servidor Elasticsearch, com dashboards configurados no Kibana.
